@@ -3,7 +3,7 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        
+
         express: {
             prototype: {
                 options: {
@@ -26,36 +26,50 @@ module.exports = function (grunt) {
                 ext: '.min.js'
             }
         },
-        cssmin: {
-            minify: {
-                expand: true,
-                cwd: 'src/css/',
-                src: ['*.css'],
-                dest: 'build/css/',
-                ext: '.min.css'
-            },
-            add_banner: {
-//                options: {
-//                    banner: '/* My minified css file */\n'
-//                },
-                files: {
-                    'build/css/style.min.css': ['build/css/style.min.css']
-                }
-            }
-        },
+//        cssmin: { // Could be useful for a project not running Gulp
+//            minify: {
+//                expand: true,
+//                cwd: 'src/css/',
+//                src: ['*.css'],
+//                dest: 'build/css/',
+//                ext: '.min.css'
+//            },
+//            add_banner: {
+////                options: {
+////                    banner: '/* My minified css file */\n'
+////                },
+//                files: {
+//                    'build/css/style.min.css': ['build/css/style.min.css']
+//                }
+//            }
+//        },
         copy: {
             markup: {
                 files: [
-                    {src: '*.{html,php}',
-                     dest: 'build/'}
+                    {
+                        src: '*.{html,php}',
+                        dest: 'build/'
+                    }
                 ]
             },
             content: {
                 files: [
-                    {src: '*.xml',
-                     dest: 'build/xml/'}
+                    {
+                        src: '*.xml',
+                        dest: 'build/xml/'
+                    }
                 ]
             }
+//            images: { // Copy images (Because imagemin did not work??!)
+//                files: [
+//                    {
+//                        expand: true,
+//                        cwd: 'src/img/',
+//                        src: '*',
+//                        dest: 'build/img/'
+//                    }
+//                ]
+//            }
         },
         open: {
             all: {
@@ -65,12 +79,12 @@ module.exports = function (grunt) {
         },
         watch: {
             sass: {
-				files: ['src/sass/**/*.{scss,sass}','src/sass/**/*.{scss,sass}'],
-				tasks: ['sass:dist'],
+                files: ['src/sass/**/*.{scss,sass}', 'src/sass/**/*.{scss,sass}'],
+                tasks: ['sass:dist'],
                 options: {
                     livereload: true
                 }
-			},
+            },
 //            css: {
 //                files: ['src/css/**'],
 //                tasks: ['cssmin'],
@@ -101,7 +115,9 @@ module.exports = function (grunt) {
             dynamic: {
                 options: {
                     optimizationLevel: 7,
-                    svgoPlugins: [{ removeViewBox: false }]
+                    svgoPlugins: [{
+                        removeViewBox: false
+                    }]
                 },
                 files: [{
                     expand: true,
@@ -111,41 +127,33 @@ module.exports = function (grunt) {
                 }]
             }
         },
-		sass: {
-			options: {
-				sourceMap: true,
-				outputStyle: 'compressed'
-			},
-			dist: {
-				files: {
-					'build/css/styles.min.css': 'src/sass/styles.scss'
-				}
-			}
-		}
+        sass: {
+            options: {
+                sourceMap: true,
+                outputStyle: 'compressed'
+            },
+            dist: {
+                files: {
+                    'build/css/styles.min.css': 'src/sass/styles.scss'
+                }
+            }
+        }
     });
 
 
     // Default task(s).
-//    grunt.registerTask('default', ['uglify', 'cssmin', 'copy', 'express:prototype', 'open', 'watch']);
-    
-    grunt.registerTask('default', ['sass', 'copy', 'express:prototype', 'open', 'watch']);
-//    grunt.registerTask('default', ['uglify', 'sass', 'copy', 'express:prototype', 'open', 'watch']);
-    
-//    grunt.registerTask('default', ['uglify', 'sass', 'copy', 'watch']);
-//    grunt.registerTask('default', ['copy', 'watch']);
-//    grunt.registerTask('build', ['uglify', 'cssmin', 'copy', 'watch']);
-    grunt.registerTask('build', ['uglify', 'cssmin', 'copy']);
+    grunt.registerTask('default', ['sass', 'uglify', 'copy', 'express:prototype', 'open', 'watch']);
+    grunt.registerTask('build', ['sass', 'uglify', 'copy']);
     grunt.registerTask('image', ['imagemin']);
 
 
-    // Load the plugin that provides the "uglify" task.
+    // Load the plugins
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
+//    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-express');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
-//    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-sass');
 };
